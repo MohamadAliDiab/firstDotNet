@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,6 +44,15 @@ namespace firstproject
             services.AddTransient<BookService>();
             services.AddTransient<AuthorsService>();
             services.AddTransient<PublishersService>();
+
+            services.AddApiVersioning(config =>
+            {
+                config.DefaultApiVersion = new ApiVersion(1, 0);
+                config.AssumeDefaultVersionWhenUnspecified = true;
+
+                //config.ApiVersionReader = new HeaderApiVersionReader("custom-version-header");
+                //config.ApiVersionReader = new MediaTypeApiVersionReader();
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v2", new OpenApiInfo { Title = "firstproject_updated_title", Version = "v2" });

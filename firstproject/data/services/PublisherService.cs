@@ -1,4 +1,5 @@
 ﻿using firstproject.data.models;
+using firstproject.data.paging;
 using firstproject.data.viewModels;
 using firstproject.Exceptions;
 using System;
@@ -16,6 +17,31 @@ namespace firstproject.data.services
         {
             _context = context;
         }
+
+        public List<publisher> GetAllPublishers(string sortBy, string searchString, int? pageNumber) 
+        {
+            var allPublishers = _context.Publishers.OrderBy(nameof=> nameof.Name).ToList();
+
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                switch (sortBy)
+                {
+                    case "name_desc":
+                        allPublishers = allPublishers.OrderByDescending(n => n.Name).ToList();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                allPublishers = allPublishers.Where(n => n.Name.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)).ToList();
+            }
+            //Paging
+            int pageSize = 5;
+            allPublishers = PaginateList<publisher>.Create(allPublishers.AsQueryable(), pageNumber ?? 1, pageSize);
+            return allPublishers;
+        } 
         public publisher AddPublisher(PublisherVM publisher)
         {
             if (StringStartWithNumber(publisher.Name)) throw new PublisherNameException("name starts with number",
