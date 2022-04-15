@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using firstproject.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace firstproject.Controllers
 {
@@ -15,15 +16,18 @@ namespace firstproject.Controllers
     public class PublisherController : ControllerBase
     {
         private PublishersService _publisherService;
-        public PublisherController(PublishersService publisherService)
+        private readonly ILogger<PublisherController> _logger;
+        public PublisherController(PublishersService publisherService, ILogger<PublisherController> logger)
         {
             _publisherService = publisherService;
+            _logger = logger;
         }
         [HttpGet("get-all-publishers")]
         public IActionResult GetAllPublishers(string sortBy, string searchString, int pageNumber)
         {
             try
             {
+                _logger.LogInformation("this is just a log in GetAllPublishers()");
                 var _result = _publisherService.GetAllPublishers(sortBy, searchString, pageNumber);
                 return Ok(_result);
             }

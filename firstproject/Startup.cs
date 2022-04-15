@@ -44,6 +44,7 @@ namespace firstproject
             services.AddTransient<BookService>();
             services.AddTransient<AuthorsService>();
             services.AddTransient<PublishersService>();
+            services.AddTransient<LogService>();
 
             services.AddApiVersioning(config =>
             {
@@ -60,7 +61,7 @@ namespace firstproject
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -76,7 +77,7 @@ namespace firstproject
             app.UseAuthorization();
 
             //Exception Handling
-            app.ConfigureBuildInExceptionHandler();
+            app.ConfigureBuildInExceptionHandler(loggerFactory);
             //app.ConfigureCustomExceptionHandler();
             app.UseEndpoints(endpoints =>
             {

@@ -24,10 +24,13 @@ namespace firstproject.data
                 .WithMany(ba => ba.book_authors)
                 .HasForeignKey(bi => bi.authorId);
 
+            modelBuilder.Entity<Log>().HasKey(n => n.Id);
+
         }
         public DbSet<book> Books { get; set; }
         public DbSet<author> Authors { get; set; }
         public DbSet<book_author> book_Authors { get; set; }
         public DbSet<publisher> Publishers { get; set; }
+        public DbSet<Log> Logs { get; set; }
     }
 }
